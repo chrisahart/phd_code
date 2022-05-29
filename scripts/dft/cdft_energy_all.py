@@ -36,6 +36,11 @@ def metric_time(t_cdft, t_dft):
     t_dft_avg = np.mean(t_dft[2:])
     return t_cdft_avg / t_dft_avg
 
+
+def metric_diff(e1, e2):
+    """ Energy difference"""
+    return e1 - e2
+
 atoms = 2
 folder_1 = 'E:/University/PhD/Programming/dft_ml_md/output/cdft/h2/analysis/final-4h/energy'
 energy_kinetic6_1, energy_potential6_1, energy_total6_1, temperature6_1, time_val6_1, time_per_step6_1 = load_energy.load_values_energy(folder_1, 'nve-hirshfeld-charge7_eps-1e-2_cell-10A-opt3-md-node2.out')
@@ -71,12 +76,6 @@ energy_kinetic6_4, energy_potential6_4, energy_total6_4, temperature6_4, time_va
 energy_kinetic7_4, energy_potential7_4, energy_total7_4, temperature7_4, time_val7_4, time_per_step7_4 = load_energy.load_values_energy(folder_4, 'cdft_eps-1e-2.out')
 energy_kinetic8_4, energy_potential8_4, energy_total8_4, temperature8_4, time_val8_4, time_per_step8_4 = load_energy.load_values_energy(folder_4, 'cdft_eps-1e-3.out')
 energy_kinetic9_4, energy_potential9_4, energy_total9_4, temperature9_4, time_val9_4, time_per_step9_4 = load_energy.load_values_energy(folder_4, 'cdft_eps-1e-4.out')
-
-folder_5 = 'F:/Backup/Archer-1/work/cahart/other/cdft/MgO/cpmd_restart/cell-110-96-4nn/md/pbe0-final/analysis/energy'
-energy_kinetic6_5, energy_potential6_5, energy_total6_5, temperature6_5, time_val6_5, time_per_step6_5 = load_energy.load_values_energy(folder_5, 'dft.out')
-energy_kinetic7_5, energy_potential7_5, energy_total7_5, temperature7_5, time_val7_5, time_per_step7_5 = load_energy.load_values_energy(folder_5, 'cdft_eps-1e-2.out')
-energy_kinetic8_5, energy_potential8_5, energy_total8_5, temperature8_5, time_val8_5, time_per_step8_5 = load_energy.load_values_energy(folder_5, 'cdft_eps-1e-3.out')
-energy_kinetic9_5, energy_potential9_5, energy_total9_5, temperature9_5, time_val9_5, time_per_step9_5 = load_energy.load_values_energy(folder_5, 'cdft_eps-1e-4.out')
 
 # folder_6 = 'F:/Backup/Archer-2/other/cdft/iron_oxides/lepidocrocite/hole-24hr/analysis'
 folder_6 = 'F:/Backup/Archer-2/other/cdft/iron_oxides/lepidocrocite/hole-final/analysis'
@@ -115,6 +114,28 @@ folder_10_2 = 'F:/Backup/Archer-2/other/cdft/ru/md/b97x/equilibrated/cdft-24h-in
 energy_kinetic1_10, energy_potential1_10, energy_total1_10, temperature1_10, time_val1_10, time_per_step1_10 = load_energy.load_values_energy(folder_10_1, 'initial-timcon-33-rattle-cpmd-rel-ru-water-run-000.out')
 energy_kinetic2_10, energy_potential2_10, energy_total2_10, temperature2_10, time_val2_10, time_per_step2_10 = load_energy.load_values_energy(folder_10_2, 'initial-timcon-33-rattle-cpmd-rel-ru-water-run-000.out')
 
+folder_11_1 = 'F:/Backup/Archer-2/other/cdft/h2/single-points/pbc-xyz-1/analysis'
+folder_11_2 = 'F:/Backup/Archer-2/other/cdft/h2/single-points/pbc-xyz-2/analysis'
+folder_11_3 = 'F:/Backup/Archer-2/other/cdft/h2/single-points/pbc-xyz-3/analysis'
+energy_total2_11_1 = np.loadtxt('{}/energy/nve-hirshfeld-charge7_eps-1e-2_cell-10A-opt3-md-node2.out'.format(folder_11_1))
+energy_total3_11_1 = np.loadtxt('{}/energy/nve-hirshfeld-charge7_eps-1e-3_cell-10A-opt3-md-node2.out'.format(folder_11_1))
+energy_total4_11_1 = np.loadtxt('{}/energy/nve-hirshfeld-charge7_eps-1e-4_cell-10A-opt3-md-node2.out'.format(folder_11_1))
+energy_total5_11_1 = np.loadtxt('{}/energy/nve-hirshfeld-charge7_eps-1e-5_cell-10A-opt3-md-node2.out'.format(folder_11_1))
+energy_total6_11_1 = np.loadtxt('{}/energy/nve-hirshfeld-charge7_eps-1e-6_cell-10A-opt3-md-node2.out'.format(folder_11_1))
+energy_total7_11_1 = np.loadtxt('{}/energy/nve-hirshfeld-charge7_eps-1e-7_cell-10A-opt3-md-node2.out'.format(folder_11_1))
+energy_total2_11_2 = np.loadtxt('{}/energy/nve-hirshfeld-charge7_eps-1e-2_cell-10A-opt3-md-node2.out'.format(folder_11_2))
+energy_total3_11_2 = np.loadtxt('{}/energy/nve-hirshfeld-charge7_eps-1e-3_cell-10A-opt3-md-node2.out'.format(folder_11_2))
+energy_total4_11_2 = np.loadtxt('{}/energy/nve-hirshfeld-charge7_eps-1e-4_cell-10A-opt3-md-node2.out'.format(folder_11_2))
+energy_total5_11_2 = np.loadtxt('{}/energy/nve-hirshfeld-charge7_eps-1e-5_cell-10A-opt3-md-node2.out'.format(folder_11_2))
+energy_total6_11_2 = np.loadtxt('{}/energy/nve-hirshfeld-charge7_eps-1e-6_cell-10A-opt3-md-node2.out'.format(folder_11_2))
+energy_total7_11_2 = np.loadtxt('{}/energy/nve-hirshfeld-charge7_eps-1e-7_cell-10A-opt3-md-node2.out'.format(folder_11_2))
+energy_total2_11_3 = np.loadtxt('{}/energy/nve-hirshfeld-charge7_eps-1e-2_cell-10A-opt3-md-node2.out'.format(folder_11_3))
+energy_total3_11_3 = np.loadtxt('{}/energy/nve-hirshfeld-charge7_eps-1e-3_cell-10A-opt3-md-node2.out'.format(folder_11_3))
+energy_total4_11_3 = np.loadtxt('{}/energy/nve-hirshfeld-charge7_eps-1e-4_cell-10A-opt3-md-node2.out'.format(folder_11_3))
+energy_total5_11_3 = np.loadtxt('{}/energy/nve-hirshfeld-charge7_eps-1e-5_cell-10A-opt3-md-node2.out'.format(folder_11_3))
+energy_total6_11_3 = np.loadtxt('{}/energy/nve-hirshfeld-charge7_eps-1e-6_cell-10A-opt3-md-node2.out'.format(folder_11_3))
+energy_total7_11_3 = np.loadtxt('{}/energy/nve-hirshfeld-charge7_eps-1e-7_cell-10A-opt3-md-node2.out'.format(folder_11_3))
+
 folder_12 = 'F:/Backup/Archer-2/other/cdft/iron_oxides/hematite/hole-final/analysis'
 energy_kinetic6_12, energy_potential6_12, energy_total6_12, temperature6_12, time_val6_12, time_per_step6_12 = load_energy.load_values_energy(folder_12, 'energy/dft.out')
 energy_kinetic7_12, energy_potential7_12, energy_total7_12, temperature7_12, time_val7_12, time_per_step7_12 = load_energy.load_values_energy(folder_12, 'energy/cdft_1e-2.out')
@@ -149,37 +170,21 @@ atoms_hematite_221 = 120
 atoms_hematite_331 = 270
 atoms_lepidocrocite = 144
 offset = 50
-offset_mgo = 50
 data_y_1 = np.array([metric_2(energy_total7_1, atoms),
                      metric_2(energy_total8_1, atoms), metric_2(energy_total9_1, atoms),
                      metric_2(energy_total10_1, atoms)])
 data_y_2 = np.array([metric_2(energy_total7_2, atoms),
                      metric_2(energy_total8_2, atoms), metric_2(energy_total9_2, atoms),
                      metric_2(energy_total10_2, atoms)])
-data_y_mgo_pbe = np.array([metric_2(energy_total8_4, atoms_mgo, 10), metric_2(energy_total9_4, atoms_mgo, 10)])
-data_y_mgo_pbe0 = np.array([metric_2(energy_total8_5[offset_mgo:], atoms_mgo, 10), metric_2(energy_total9_5[offset_mgo:], atoms_mgo, 10)])
+data_y_mgo = np.array([metric_2(energy_total8_4, atoms_mgo, 10), metric_2(energy_total9_4, atoms_mgo, 10)])
 data_y_lep = np.array([metric_2(energy_total7_6[offset:200], atoms_lepidocrocite, 10), metric_2(energy_total8_6[offset:200], atoms_lepidocrocite, 10)])
-# data_y_lep2 = np.array([metric_2(energy_total13_6[offset:200], atoms_lepidocrocite, 10), metric_2(energy_total14_6[offset:200], atoms_lepidocrocite, 10)])
 data_y_bivo = np.array([metric_2(energy_total7_7[offset:200], atoms_bivo, 10), metric_2(energy_total8_7[offset:200], atoms_bivo, 10)])
-data_y_hem = np.array([metric_2(energy_total14_12, atoms_hematite_221, 10), metric_2(energy_total15_12, atoms_hematite_221, 10)])
-# ax_drift.plot([data_x[-1], data_x[0]], [1e-6, 1e-6], 'k--')
-ax_drift.plot(data_x_1, data_y_1, '+-', color='black', label=r'H$_{2}$ PBE')
-ax_drift.plot(data_x_1, data_y_2, '+-', color='grey', label=r'H$_{2}$ PBE PBC')
-ax_drift.plot(5e-4, 4.5e-5, 'rx', label=r'Ru$^{2+}$- Ru$^{3+}$ BLYP')
-ax_drift.plot(5e-4, 2.6e-5, 'gx', label=r'Ru$^{2+}$- Ru$^{3+}$ B3LYP')
-ax_drift.plot(5e-4, 2.5e-5, 'bx', label=r'Ru$^{2+}$- Ru$^{3+}$ ωB97X')
-ax_drift.plot([1e-3], data_y_mgo_pbe[0]*(1000/((np.shape(energy_total8_4)[0]*0.5))), 'o', color='orange', fillstyle='none', label='MgO PBE')
-ax_drift.plot([1e-3], data_y_mgo_pbe0[0]*(1000/((np.shape(energy_total8_5)[0]*0.5))), 'o', color='tan', fillstyle='none', label='MgO PBE0')
-ax_drift.plot([1e-3], data_y_bivo[1]*(1000/((np.shape(energy_total8_6)[0]*0.5))), 'D', color='y', fillstyle='full', label=r'BiVO$_{4}$ HSE(25%)')
-ax_drift.plot([1e-3], data_y_lep[1]*(1000/((np.shape(energy_total8_6)[0]*0.5))), '^', color='c', fillstyle='full', label='Lepidocrocite HSE(18%)')
-# ax_drift.plot([1e-3], data_y_lep2[1]*(1000/((np.shape(energy_total14_6)[0]*0.5))), '^', color='c', fillstyle='none')
-ax_drift.plot([1e-3], data_y_hem[1]*(1000/((np.shape(energy_total14_12)[0]*0.5))), 'P', color='m', fillstyle='full', label='Hematite HSE(12%)')
-# ax_drift.plot([3e-3], data_y_hem[1]*(1000/((np.shape(energy_total15_12)[0]*0.5))), 'P', color='m', fillstyle='full')
-# ax_drift.plot([0, 1], [dft, dft], '-', color='grey')
-# ax_drift.plot([0, 1], [4.0e-5, 4.0e-5], 'r--')
-# ax_drift.plot([0, 1], [4.3e-5, 4.3e-5], 'g--')
-# ax_drift.plot([0, 1], [5.5e-5, 5.5e-5], 'b--')
-# ax_drift.plot(5e-4, 4.5e-5, 'r+', markersize=20)
+ax_drift.plot(data_x_1, data_y_1, '+-', color='black')
+ax_drift.plot(data_x_1, data_y_2, '+-', color='grey')
+ax_drift.plot([1e-3], data_y_mgo[0]*(1000/((np.shape(energy_total8_4)[0]*0.5))), 'o', color='orange', fillstyle='none')
+ax_drift.plot(5e-4, 4.5e-5, 'rx')
+ax_drift.plot(5e-4, 2.6e-5, 'gx')
+ax_drift.plot(5e-4, 2.5e-5, 'bx')
 ax_drift.set_yscale('log')
 ax_drift.set_xscale('log')
 ax_drift.set_xlabel('Constraint convergence [e]')
@@ -193,7 +198,6 @@ fig_drift.savefig('{}/energy_drift_{}.png'.format(folder_save, time_plot), dpi=p
 
 # Plot energy drift DFT
 fig_drift_dft, ax_drift_dft = plt.subplots()
-atoms_h2 = 2
 data_x_1 = [1e-1, 1e-2, 1e-3, 1e-4, 1e-5, 1e-6, 1e-7]
 data_y_1 = np.array([metric_2(energy_total12_3, atoms_h2), metric_2(energy_total6_3, atoms_h2),
                      metric_2(energy_total7_3, atoms_h2), metric_2(energy_total9_3, atoms_h2),
@@ -203,10 +207,8 @@ ax_drift_dft.plot(data_x_1, data_y_1, '+-', color='black')
 ax_drift_dft.legend(frameon=False)
 ax_drift_dft.set_yscale('log')
 ax_drift_dft.set_xscale('log')
-ax_drift_dft.set_xlabel('Energy gradient [H]')
+ax_drift_dft.set_xlabel('DFT convergence')
 ax_drift_dft.set_ylabel('Energy drift [H/atom/ps]')
-# ax_drift_dft.set_xlim([8e-7, 1.3e-3])
-# ax_drift.set_ylim([0.9e-7, 1.5e-4])
 fig_drift_dft.tight_layout()
 fig_drift_dft.savefig('{}/energy_drift_dft_{}.png'.format(folder_save, time_plot), dpi=parameters.save_dpi, bbbox_inches='tight')
 
@@ -235,6 +237,35 @@ ax_time.set_ylabel('Relative time taken per MD step')
 ax_time.set_ylim([2, 5])
 fig_time.tight_layout()
 fig_time.savefig('{}/time_{}.png'.format(folder_save, time_plot), dpi=parameters.save_dpi, bbbox_inches='tight')
+
+# Plot energy difference CDFT
+fig_energy_diff, ax_energy_diff = plt.subplots()
+data_x_h2 = [1e-2, 1e-3, 1e-4, 1e-5, 1e-6, 1e-7]
+data_y_h2 = np.array([metric_diff(energy_total2_11_1, energy_total2_11_2),
+                      metric_diff(energy_total3_11_1, energy_total3_11_2),
+                      metric_diff(energy_total4_11_1, energy_total4_11_2),
+                      metric_diff(energy_total5_11_1, energy_total5_11_2),
+                      metric_diff(energy_total6_11_1, energy_total6_11_2),
+                      metric_diff(energy_total7_11_1, energy_total7_11_2)])
+ax_energy_diff.plot(data_x_h2, data_y_h2, '.-', color='black', label='Hydrogen')
+data_x_lepido = [1e-2, 3e-3, 1e-3]
+data_y_lepido = np.array([metric_diff(energy_total7_6[0], energy_total13_6[0]),
+                          metric_diff(energy_total8_6[0], energy_total14_6[0]),
+                          metric_diff(energy_total10_6[0], energy_total15_6[0])])
+ax_energy_diff.plot(data_x_lepido, data_y_lepido, 'r.-', label='Lepidocrocite')
+data_x_hem = [1e-2, 1e-3, 1e-4]
+data_y_hem = np.array([metric_diff(energy_total7_12[0], energy_total13_12[0]),
+                       metric_diff(energy_total10_12[0], energy_total15_12[0]),
+                       metric_diff(energy_total11_12[0], energy_total16_12[0])])
+ax_energy_diff.plot(data_x_hem, data_y_hem, 'b.-', label='Hematite')
+ax_energy_diff.legend(frameon=False)
+# ax_energy_diff.set_yscale('log')
+ax_energy_diff.set_xscale('log')
+# ax_energy_diff.set_ylim([-1e-9, 1e-5])
+ax_energy_diff.set_xlabel('Constraint convergence [e]')
+ax_energy_diff.set_ylabel('Energy difference [H]')
+fig_energy_diff.tight_layout()
+fig_energy_diff.savefig('{}/energy_diff_h2.png'.format(folder_save), dpi=parameters.save_dpi, bbbox_inches='tight')
 
 if __name__ == "__main__":
     print('Finished.')
