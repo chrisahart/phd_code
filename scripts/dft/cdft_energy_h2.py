@@ -26,8 +26,10 @@ def metric_1(energy, atoms):
 
 def metric_2(energy, atoms, interval=50):
     """ Energy drift as peak to peak distance"""
-    metric = np.abs(np.max(energy[0:interval])-np.max(energy[-interval:])) / atoms
-    return metric
+    drift = np.abs(np.max(energy[0:interval])-np.max(energy[-interval:])) / atoms
+    norm_factor = 1000 / ((np.shape(energy)[0]*0.5))
+    drift_norm = drift * norm_factor
+    return drift_norm
 
 
 def metric_time(t_cdft, t_dft):
@@ -92,13 +94,20 @@ energy_kinetic15_6, energy_potential15_6, energy_total15_6, temperature15_6, tim
 energy_kinetic16_6, energy_potential16_6, energy_total16_6, temperature16_6, time_val16_6, time_per_step16_6 = load_energy.load_values_energy(folder_6, 'energy/cdft_eps-1e-4-cp2k-8.2.out')
 strength7_6 = np.loadtxt('{}/strength/cdft_eps-1e-2.out'.format(folder_6))
 strength8_6 = np.loadtxt('{}/strength/cdft_eps-1e-3.out'.format(folder_6))
+strength13_6 = np.loadtxt('{}/strength/cdft_eps-1e-2-cp2k-8.2.out'.format(folder_6))
+strength14_6 = np.loadtxt('{}/strength/cdft_eps-1e-3-cp2k-8.2.out'.format(folder_6))
+strength15_6 = np.loadtxt('{}/strength/cdft_eps-3e-3-cp2k-8.2.out'.format(folder_6))
 
 folder_7 = 'F:/Backup/Archer-2/other/cdft/bivo/electron-final/analysis'
 energy_kinetic6_7, energy_potential6_7, energy_total6_7, temperature6_7, time_val6_7, time_per_step6_7 = load_energy.load_values_energy(folder_7, 'energy/dft.out')
 energy_kinetic7_7, energy_potential7_7, energy_total7_7, temperature7_7, time_val7_7, time_per_step7_7 = load_energy.load_values_energy(folder_7, 'energy/cdft_1e-2.out')
 energy_kinetic8_7, energy_potential8_7, energy_total8_7, temperature8_7, time_val8_7, time_per_step8_7 = load_energy.load_values_energy(folder_7, 'energy/cdft_1e-3.out')
+energy_kinetic9_7, energy_potential9_7, energy_total9_7, temperature9_7, time_val9_7, time_per_step9_7 = load_energy.load_values_energy(folder_7, 'energy/cdft_1e-2-cp2k-8.2.out')
+energy_kinetic10_7, energy_potential10_7, energy_total10_7, temperature10_7, time_val10_7, time_per_step10_7 = load_energy.load_values_energy(folder_7, 'energy/cdft_1e-3.out')
 strength7_7 = np.loadtxt('{}/strength/cdft_1e-2.out'.format(folder_7))
 strength8_7 = np.loadtxt('{}/strength/cdft_1e-3.out'.format(folder_7))
+strength9_7 = np.loadtxt('{}/strength/cdft_1e-2-cp2k-8.2.out'.format(folder_7))
+strength10_7 = np.loadtxt('{}/strength/cdft_1e-3.out'.format(folder_7))
 
 folder_8_1 = 'F:/Backup/Archer-2/other/cdft/ru/md/blyp/equilibrated/dft-24h-inverse/analysis/energy'
 folder_8_2 = 'F:/Backup/Archer-2/other/cdft/ru/md/blyp/equilibrated/cdft-24h-inverse/analysis/energy'
@@ -128,11 +137,15 @@ energy_kinetic15_12, energy_potential15_12, energy_total15_12, temperature15_12,
 energy_kinetic16_12, energy_potential16_12, energy_total16_12, temperature16_12, time_val16_12, time_per_step16_12 = load_energy.load_values_energy(folder_12, 'energy/cdft_1e-4-cp2k-8.2.out')
 strength7_12 = np.loadtxt('{}/strength/cdft_1e-2.out'.format(folder_12))
 strength8_12 = np.loadtxt('{}/strength/cdft_1e-3.out'.format(folder_12))
+strength13_12 = np.loadtxt('{}/strength/cdft_1e-2-cp2k-8.2.out'.format(folder_12))
+strength14_12 = np.loadtxt('{}/strength/cdft_1e-3-cp2k-8.2.out'.format(folder_12))
+strength15_12 = np.loadtxt('{}/strength/cdft_3e-3-cp2k-8.2.out'.format(folder_12))
 
 folder_save = 'E:/University/PhD/Programming/dft_ml_md/output/cdft/energy_conservation'
 time_plot = 1000
 
 # Plot energy drift log 1
+print('Plot energy drift log 1')
 params = {'font.size': 12,
           'axes.labelsize': 14,
           'lines.markersize': 15,
@@ -143,6 +156,7 @@ data_x_1 = [1e-3, 1e-4, 1e-5, 1e-6]
 dft = (-0.658718021--0.658824319)/2
 dft_pbc = (-0.657768859--0.657821197)/2
 atoms_h2 = 2
+atoms_ru = 191
 atoms_mgo = 96
 atoms_bivo = 192
 atoms_hematite_221 = 120
@@ -150,50 +164,86 @@ atoms_hematite_331 = 270
 atoms_lepidocrocite = 144
 offset = 50
 offset_mgo = 50
+end_short = 100 * 2
+end_ru = 1000
+interval_mgo = 10
 data_y_1 = np.array([metric_2(energy_total7_1, atoms),
-                     metric_2(energy_total8_1, atoms), metric_2(energy_total9_1, atoms),
+                     metric_2(energy_total8_1, atoms),
+                     metric_2(energy_total9_1, atoms),
                      metric_2(energy_total10_1, atoms)])
 data_y_2 = np.array([metric_2(energy_total7_2, atoms),
-                     metric_2(energy_total8_2, atoms), metric_2(energy_total9_2, atoms),
+                     metric_2(energy_total8_2, atoms),
+                     metric_2(energy_total9_2, atoms),
                      metric_2(energy_total10_2, atoms)])
-data_y_mgo_pbe = np.array([metric_2(energy_total8_4, atoms_mgo, 10), metric_2(energy_total9_4, atoms_mgo, 10)])
-data_y_mgo_pbe0 = np.array([metric_2(energy_total8_5[offset_mgo:], atoms_mgo, 10), metric_2(energy_total9_5[offset_mgo:], atoms_mgo, 10)])
-data_y_lep = np.array([metric_2(energy_total7_6[offset:200], atoms_lepidocrocite, 10), metric_2(energy_total8_6[offset:200], atoms_lepidocrocite, 10)])
-# data_y_lep2 = np.array([metric_2(energy_total13_6[offset:200], atoms_lepidocrocite, 10), metric_2(energy_total14_6[offset:200], atoms_lepidocrocite, 10)])
-data_y_bivo = np.array([metric_2(energy_total7_7[offset:200], atoms_bivo, 10), metric_2(energy_total8_7[offset:200], atoms_bivo, 10)])
-data_y_hem = np.array([metric_2(energy_total14_12, atoms_hematite_221, 10), metric_2(energy_total15_12, atoms_hematite_221, 10)])
-# ax_drift.plot([data_x[-1], data_x[0]], [1e-6, 1e-6], 'k--')
+data_y_mgo_pbe = np.array([metric_2(energy_total7_4, atoms_mgo, interval_mgo), metric_2(energy_total8_4, atoms_mgo, interval_mgo)])
+data_y_mgo_pbe0 = np.array([metric_2(energy_total7_5[offset_mgo:], atoms_mgo, interval_mgo), metric_2(energy_total8_5[offset_mgo:], atoms_mgo, interval_mgo)])
+data_y_lepid = np.array([metric_2(energy_total13_6[offset:end_short], atoms_lepidocrocite), metric_2(energy_total14_6[offset:end_short], atoms_lepidocrocite)])
+data_y_hem = np.array([metric_2(energy_total13_12[:end_short], atoms_hematite_221, interval_mgo), metric_2(energy_total14_12[:end_short], atoms_hematite_221, interval_mgo)])
+data_y_bivo = np.array([metric_2(energy_total9_7[:end_short], atoms_bivo, interval_mgo), metric_2(energy_total10_7[:], atoms_bivo, interval_mgo)])
 ax_drift.plot(data_x_1, data_y_1, '+-', color='black', label=r'H$_{2}$ PBE')
 ax_drift.plot(data_x_1, data_y_2, '+-', color='grey', label=r'H$_{2}$ PBE PBC')
 ax_drift.plot(5e-4, 4.5e-5, 'rx', label=r'Ru$^{2+}$- Ru$^{3+}$ BLYP')
 ax_drift.plot(5e-4, 2.6e-5, 'gx', label=r'Ru$^{2+}$- Ru$^{3+}$ B3LYP')
 ax_drift.plot(5e-4, 2.5e-5, 'bx', label=r'Ru$^{2+}$- Ru$^{3+}$ ωB97X')
-ax_drift.plot([1e-3], data_y_mgo_pbe[0]*(1000/((np.shape(energy_total8_4)[0]*0.5))), 'o', color='orange', fillstyle='none', label='MgO PBE')
-ax_drift.plot([1e-3], data_y_mgo_pbe0[0]*(1000/((np.shape(energy_total8_5)[0]*0.5))), 'o', color='tan', fillstyle='none', label='MgO PBE0')
-ax_drift.plot([1e-3], data_y_bivo[1]*(1000/((np.shape(energy_total8_6)[0]*0.5))), 'D', color='y', fillstyle='full', label=r'BiVO$_{4}$ HSE(25%)')
-ax_drift.plot([1e-3], data_y_lep[1]*(1000/((np.shape(energy_total8_6)[0]*0.5))), '^', color='c', fillstyle='full', label='Lepidocrocite HSE(18%)')
-# ax_drift.plot([1e-3], data_y_lep2[1]*(1000/((np.shape(energy_total14_6)[0]*0.5))), '^', color='c', fillstyle='none')
-ax_drift.plot([1e-3], data_y_hem[1]*(1000/((np.shape(energy_total14_12)[0]*0.5))), 'P', color='m', fillstyle='full', label='Hematite HSE(12%)')
-# ax_drift.plot([3e-3], data_y_hem[1]*(1000/((np.shape(energy_total15_12)[0]*0.5))), 'P', color='m', fillstyle='full')
-# ax_drift.plot([0, 1], [dft, dft], '-', color='grey')
-# ax_drift.plot([0, 1], [4.0e-5, 4.0e-5], 'r--')
-# ax_drift.plot([0, 1], [4.3e-5, 4.3e-5], 'g--')
-# ax_drift.plot([0, 1], [5.5e-5, 5.5e-5], 'b--')
-# ax_drift.plot(5e-4, 4.5e-5, 'r+', markersize=20)
+ax_drift.plot([1e-3], data_y_mgo_pbe[1], 'o', color='orange', fillstyle='none', label='MgO PBE')
+ax_drift.plot([1e-3], data_y_mgo_pbe0[1], 'o', color='tan', fillstyle='none', label='MgO PBE0')
+ax_drift.plot([1e-3], data_y_bivo[1], 'D', color='y', fillstyle='full', label=r'BiVO$_{4}$ HSE(25%)')
+ax_drift.plot([1e-3], data_y_lepid[1], '^', color='c', fillstyle='full', label='Lepidocrocite HSE(18%)')
+ax_drift.plot([1e-3], data_y_hem[1], 'P', color='m', fillstyle='full', label='Hematite HSE(12%)')
 ax_drift.set_yscale('log')
 ax_drift.set_xscale('log')
 ax_drift.set_xlabel('Constraint convergence [e]')
 ax_drift.set_ylabel('Energy drift [H/atom/ps]')
 ax_drift.set_xlim([8e-7, 1.3e-3])
-# ax_drift.set_ylim([4e-7, 1.2e-4])
 ax_drift.set_ylim([0.9e-7, 1.5e-4])
 ax_drift.legend(frameon=False)
 fig_drift.tight_layout()
 fig_drift.savefig('{}/energy_drift_{}.png'.format(folder_save, time_plot), dpi=parameters.save_dpi, bbbox_inches='tight')
 
+# Plot energy drift log 2
+print('Plot energy drift log 2')
+fig_drift2, ax_drift2 = plt.subplots()
+data_y_1 = np.array([metric_2(energy_total7_1, atoms_h2),
+                     metric_2(energy_total8_1, atoms_h2),
+                     metric_2(energy_total9_1, atoms_h2),
+                     metric_2(energy_total10_1, atoms_h2)])
+data_y_2 = np.array([metric_2(energy_total7_2, atoms_h2),
+                     metric_2(energy_total8_2, atoms_h2),
+                     metric_2(energy_total9_2, atoms_h2),
+                     metric_2(energy_total10_2, atoms_h2)])
+# data_y_ru_blyp = np.array([metric_2(energy_total2_8[:end_ru], atoms_ru)])
+# data_y_ru_b3lyp = np.array([metric_2(energy_total2_9[:end_ru], atoms_ru)])
+# data_y_ru_b97x = np.array([metric_2(energy_total2_10[:end_ru], atoms_ru)])
+data_y_mgo_pbe = np.array([metric_2(energy_total7_4, atoms_mgo, interval_mgo), metric_2(energy_total8_4, atoms_mgo, interval_mgo)])
+data_y_mgo_pbe0 = np.array([metric_2(energy_total7_5[offset_mgo:], atoms_mgo, interval_mgo), metric_2(energy_total8_5[offset_mgo:], atoms_mgo, interval_mgo)])
+data_y_lepid = np.array([metric_2(energy_total13_6[offset:end_short], atoms_lepidocrocite), metric_2(energy_total14_6[offset:end_short], atoms_lepidocrocite)])
+data_y_hem = np.array([metric_2(energy_total13_12[:end_short], atoms_hematite_221, interval_mgo), metric_2(energy_total14_12[:end_short], atoms_hematite_221, interval_mgo)])
+data_y_bivo = np.array([metric_2(energy_total9_7[:end_short], atoms_bivo, interval_mgo), metric_2(energy_total10_7[:], atoms_bivo, interval_mgo)])
+ax_drift2.plot(data_x_1, data_y_1, '+-', color='black', label=r'H$_{2}$ PBE')
+ax_drift2.plot(data_x_1, data_y_2, '+-', color='grey', label=r'H$_{2}$ PBE PBC')
+ax_drift2.plot(5e-4, 4.5e-5, 'rx', label=r'Ru$^{2+}$- Ru$^{3+}$ BLYP')
+ax_drift2.plot(5e-4, 2.6e-5, 'gx', label=r'Ru$^{2+}$- Ru$^{3+}$ B3LYP')
+ax_drift2.plot(5e-4, 2.5e-5, 'bx', label=r'Ru$^{2+}$- Ru$^{3+}$ ωB97X')
+# ax_drift2.plot(5e-4, data_y_ru_blyp, 'rx', label=r'Ru$^{2+}$- Ru$^{3+}$ BLYP')
+# ax_drift2.plot(5e-4, data_y_ru_b3lyp, 'gx', label=r'Ru$^{2+}$- Ru$^{3+}$ B3LYP')
+# ax_drift2.plot(5e-4, data_y_ru_b97x, 'bx', label=r'Ru$^{2+}$- Ru$^{3+}$ ωB97X')
+ax_drift2.plot([1e-2, 1e-3], data_y_mgo_pbe, 'o-', color='orange', fillstyle='none', label='MgO PBE')
+ax_drift2.plot([1e-2, 1e-3], data_y_mgo_pbe0, 'o-', color='tan', fillstyle='none', label='MgO PBE0')
+ax_drift2.plot([1e-2, 1e-3], data_y_bivo, 'D-', color='y', fillstyle='full', label=r'BiVO$_{4}$ HSE(25%)')
+ax_drift2.plot([1e-2, 1e-3], data_y_lepid, '^-', color='c', fillstyle='full', label='Lepidocrocite HSE(18%)')
+ax_drift2.plot([1e-2, 1e-3], data_y_hem, 'P-', color='m', fillstyle='full', label='Hematite HSE(12%)')
+ax_drift2.set_yscale('log')
+ax_drift2.set_xscale('log')
+ax_drift2.set_xlabel('Constraint convergence [e]')
+ax_drift2.set_ylabel('Energy drift [H/atom/ps]')
+ax_drift2.set_ylim([0.9e-7, 1.5e-4])
+ax_drift2.legend(frameon=False)
+fig_drift2.tight_layout()
+fig_drift2.savefig('{}/energy_drift2_{}.png'.format(folder_save, time_plot), dpi=parameters.save_dpi, bbbox_inches='tight')
+
 # Plot energy drift DFT
+print('Plot energy drift DFT')
 fig_drift_dft, ax_drift_dft = plt.subplots()
-atoms_h2 = 2
 data_x_1 = [1e-1, 1e-2, 1e-3, 1e-4, 1e-5, 1e-6, 1e-7]
 data_y_1 = np.array([metric_2(energy_total12_3, atoms_h2), metric_2(energy_total6_3, atoms_h2),
                      metric_2(energy_total7_3, atoms_h2), metric_2(energy_total9_3, atoms_h2),
@@ -205,8 +255,6 @@ ax_drift_dft.set_yscale('log')
 ax_drift_dft.set_xscale('log')
 ax_drift_dft.set_xlabel('Energy gradient [H]')
 ax_drift_dft.set_ylabel('Energy drift [H/atom/ps]')
-# ax_drift_dft.set_xlim([8e-7, 1.3e-3])
-# ax_drift.set_ylim([0.9e-7, 1.5e-4])
 fig_drift_dft.tight_layout()
 fig_drift_dft.savefig('{}/energy_drift_dft_{}.png'.format(folder_save, time_plot), dpi=parameters.save_dpi, bbbox_inches='tight')
 
@@ -217,24 +265,64 @@ data_y_1 = np.array([metric_time(time_per_step9_1, time_per_step12_1),
                      metric_time(time_per_step10_1, time_per_step12_1)])
 data_y_2 = np.array([metric_time(time_per_step9_2, time_per_step12_2),
                      metric_time(time_per_step10_2, time_per_step12_2)])
-data_y_mgo = np.array([metric_time(time_per_step7_4, time_per_step6_4),
-                       metric_time(time_per_step8_4, time_per_step6_4)])
+data_y_mgo_pbe = np.array([metric_time(time_per_step7_4, time_per_step6_4),
+                          metric_time(time_per_step8_4, time_per_step6_4)])
+data_y_mgo_pbe0 = np.array([metric_time(time_per_step7_5, time_per_step6_5),
+                            metric_time(time_per_step8_5, time_per_step6_5)])
 data_y_ru_blyp = np.array([metric_time(time_per_step2_8, time_per_step1_8)])
 data_y_ru_b3lyp = np.array([metric_time(time_per_step2_9, time_per_step1_9)])
 data_y_ru_b97x = np.array([metric_time(time_per_step2_10, time_per_step1_10)])
-ax_time.plot(data_x_1, data_y_1, '+-', color='black')
-ax_time.plot(data_x_1, data_y_2, '+-', color='grey')
-ax_time.plot([1e-2, 1e-3], data_y_mgo, 'o-', color='orange', fillstyle='none')
-ax_time.plot([5e-4], data_y_ru_blyp, 'rx')
-ax_time.plot([5e-4], data_y_ru_b3lyp, 'gx')
-ax_time.plot([5e-4], data_y_ru_b97x, 'bx')
-print(data_y_ru_b3lyp)
+ax_time.plot(data_x_1, data_y_1, '+-', color='black', label=r'H$_{2}$ PBE')
+ax_time.plot(data_x_1, data_y_2, '+-', color='grey', label=r'H$_{2}$ PBE PBC')
+ax_time.plot([1e-2, 1e-3], data_y_mgo_pbe, 'o-', color='orange', fillstyle='none', label='MgO PBE')
+ax_time.plot([1e-2, 1e-3], data_y_mgo_pbe0, 'o-', color='tan', fillstyle='none', label='MgO PBE0')
+# ax_time.plot([5e-4], data_y_ru_blyp, 'rx', label=r'Ru$^{2+}$- Ru$^{3+}$ BLYP')
+ax_time.plot([5e-4], data_y_ru_b3lyp, 'gx', label=r'Ru$^{2+}$- Ru$^{3+}$ B3LYP')
+ax_time.plot([5e-4], data_y_ru_b97x, 'bx', label=r'Ru$^{2+}$- Ru$^{3+}$ ωB97X')
 ax_time.set_xscale('log')
 ax_time.set_xlabel('Constraint convergence [e]')
 ax_time.set_ylabel('Relative time taken per MD step')
 ax_time.set_ylim([2, 5])
+ax_time.legend(frameon=False)
 fig_time.tight_layout()
 fig_time.savefig('{}/time_{}.png'.format(folder_save, time_plot), dpi=parameters.save_dpi, bbbox_inches='tight')
+
+# Plot time taken 2
+print('Plot time taken 2')
+fig_time2, ax_time2 = plt.subplots()
+data_x_1 = [1e-5, 1e-6]
+data_y_1 = np.array([metric_time(time_per_step9_1, time_per_step12_1),
+                     metric_time(time_per_step10_1, time_per_step12_1)])
+data_y_2 = np.array([metric_time(time_per_step9_2, time_per_step12_2),
+                     metric_time(time_per_step10_2, time_per_step12_2)])
+data_y_mgo_pbe = np.array([metric_time(time_per_step7_4, time_per_step6_4),
+                          metric_time(time_per_step8_4, time_per_step6_4)])
+data_y_mgo_pbe0 = np.array([metric_time(time_per_step7_5, time_per_step6_5),
+                            metric_time(time_per_step8_5, time_per_step6_5)])
+data_y_lepid = np.array([metric_time(time_per_step13_6, time_per_step6_6), metric_time(time_per_step14_6, time_per_step6_6)])
+data_y_hem = np.array([metric_time(time_per_step13_12, time_per_step6_12), metric_time(time_per_step14_12, time_per_step6_12)])
+data_y_bivo = np.array([metric_time(time_per_step9_7, time_per_step6_7), metric_time(time_per_step10_7, time_per_step6_7)])
+data_y_ru_blyp = np.array([metric_time(time_per_step2_8, time_per_step1_8)])
+data_y_ru_b3lyp = np.array([metric_time(time_per_step2_9, time_per_step1_9)])
+data_y_ru_b97x = np.array([metric_time(time_per_step2_10, time_per_step1_10)])
+ax_time2.plot(data_x_1, data_y_1, '+-', color='black', label=r'H$_{2}$ PBE')
+ax_time2.plot(data_x_1, data_y_2, '+-', color='grey', label=r'H$_{2}$ PBE PBC')
+ax_time2.plot([5e-4], data_y_ru_blyp, 'rx', label=r'Ru$^{2+}$- Ru$^{3+}$ BLYP')
+ax_time2.plot([5e-4], data_y_ru_b3lyp, 'gx', label=r'Ru$^{2+}$- Ru$^{3+}$ B3LYP')
+ax_time2.plot([5e-4], data_y_ru_b97x, 'bx', label=r'Ru$^{2+}$- Ru$^{3+}$ ωB97X')
+ax_time2.plot([1e-2, 1e-3], data_y_mgo_pbe, 'o-', color='orange', fillstyle='none', label='MgO PBE')
+ax_time2.plot([1e-2, 1e-3], data_y_mgo_pbe0, 'o-', color='tan', fillstyle='none', label='MgO PBE0')
+ax_time2.plot([1e-2, 1e-3], data_y_bivo, 'D-', color='y', fillstyle='full', label=r'BiVO$_{4}$ HSE(25%)')
+ax_time2.plot([1e-2, 1e-3], data_y_lepid, '^-', color='c', fillstyle='full', label='Lepidocrocite HSE(18%)')
+ax_time2.plot([1e-2, 1e-3], data_y_hem, 'P-', color='m', fillstyle='full', label='Hematite HSE(12%)')
+ax_time2.set_xscale('log')
+ax_time2.set_xlabel('Constraint convergence [e]')
+ax_time2.set_ylabel('Relative time taken per MD step')
+ax_time2.set_ylim([1, 5])
+ax_time2.set_ylim([1, 12])
+ax_time2.legend(frameon=False)
+fig_time2.tight_layout()
+fig_time2.savefig('{}/time2_{}.png'.format(folder_save, time_plot), dpi=parameters.save_dpi, bbbox_inches='tight')
 
 if __name__ == "__main__":
     print('Finished.')

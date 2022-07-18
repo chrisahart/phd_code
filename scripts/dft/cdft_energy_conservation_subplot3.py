@@ -77,14 +77,21 @@ energy_kinetic16_6, energy_potential16_6, energy_total16_6, temperature16_6, tim
 strength7_6 = np.loadtxt('{}/strength/cdft_eps-1e-2.out'.format(folder_6))
 strength8_6 = np.loadtxt('{}/strength/cdft_eps-1e-3.out'.format(folder_6))
 strength13_6 = np.loadtxt('{}/strength/cdft_eps-1e-2-cp2k-8.2.out'.format(folder_6))
+strength14_6 = np.loadtxt('{}/strength/cdft_eps-1e-3-cp2k-8.2.out'.format(folder_6))
 strength15_6 = np.loadtxt('{}/strength/cdft_eps-3e-3-cp2k-8.2.out'.format(folder_6))
 
 folder_7 = 'F:/Backup/Archer-2/other/cdft/bivo/electron-final/analysis'
 energy_kinetic6_7, energy_potential6_7, energy_total6_7, temperature6_7, time_val6_7, time_per_step6_7 = load_energy.load_values_energy(folder_7, 'energy/dft.out')
 energy_kinetic7_7, energy_potential7_7, energy_total7_7, temperature7_7, time_val7_7, time_per_step7_7 = load_energy.load_values_energy(folder_7, 'energy/cdft_1e-2.out')
 energy_kinetic8_7, energy_potential8_7, energy_total8_7, temperature8_7, time_val8_7, time_per_step8_7 = load_energy.load_values_energy(folder_7, 'energy/cdft_1e-3.out')
+energy_kinetic9_7, energy_potential9_7, energy_total9_7, temperature9_7, time_val9_7, time_per_step9_7 = load_energy.load_values_energy(folder_7, 'energy/cdft_1e-2-cp2k-8.2.out')
+# energy_kinetic10_7, energy_potential10_7, energy_total10_7, temperature10_7, time_val10_7, time_per_step10_7 = load_energy.load_values_energy(folder_7, 'energy/cdft_1e-3.out')
+energy_kinetic10_7, energy_potential10_7, energy_total10_7, temperature10_7, time_val10_7, time_per_step10_7 = load_energy.load_values_energy(folder_7, 'energy/cdft_1e-3-cp2k-8.2.out')
 strength7_7 = np.loadtxt('{}/strength/cdft_1e-2.out'.format(folder_7))
 strength8_7 = np.loadtxt('{}/strength/cdft_1e-3.out'.format(folder_7))
+strength9_7 = np.loadtxt('{}/strength/cdft_1e-2-cp2k-8.2.out'.format(folder_7))
+# strength10_7 = np.loadtxt('{}/strength/cdft_1e-3.out'.format(folder_7))
+strength10_7 = np.loadtxt('{}/strength/cdft_1e-3-cp2k-8.2.out'.format(folder_7))
 
 folder_8 = 'F:/Backup/Archer-2/other/cdft/iron_oxides/hematite/hole_25hfx-final-opt/analysis'
 energy_kinetic6_8, energy_potential6_8, energy_total6_8, temperature6_8, time_val6_8, time_per_step6_8 = load_energy.load_values_energy(folder_8, 'energy/dft.out')
@@ -119,6 +126,7 @@ energy_kinetic16_12, energy_potential16_12, energy_total16_12, temperature16_12,
 strength7_12 = np.loadtxt('{}/strength/cdft_1e-2.out'.format(folder_12))
 strength8_12 = np.loadtxt('{}/strength/cdft_1e-3.out'.format(folder_12))
 strength13_12 = np.loadtxt('{}/strength/cdft_1e-2-cp2k-8.2.out'.format(folder_12))
+strength14_12 = np.loadtxt('{}/strength/cdft_1e-3-cp2k-8.2.out'.format(folder_12))
 strength15_12 = np.loadtxt('{}/strength/cdft_3e-3-cp2k-8.2.out'.format(folder_12))
 
 folder_save = 'E:/University/PhD/Programming/dft_ml_md/output/cdft/energy_conservation'
@@ -150,46 +158,46 @@ ax_subplot[0, 1].set_xlim([0, time_plot])
 ax_subplot[0, 1].set_ylabel('Lagrange multiplier')
 
 # BiVO4 electron energy
-ax_subplot[1, 0].plot(time_val6_7[:200], 1e6*(energy_total6_7[:200]-energy_total6_7[0])/atoms_bivo, 'k', label='DFT')
-ax_subplot[1, 0].plot(time_val7_7[:200], 1e6*(energy_total7_7[:200]-energy_total7_7[0])/atoms_bivo, 'r', label='CDFT 1e-2')
-ax_subplot[1, 0].plot(time_val8_7[:200], 1e6*(energy_total8_7[:200]-energy_total8_7[0])/atoms_bivo, 'g', label='CDFT 1e-3')
+ax_subplot[1, 0].plot(time_val6_7[:205], 1e6*(energy_total6_7[:205]-energy_total6_7[0])/atoms_bivo, 'k', label='DFT')
+ax_subplot[1, 0].plot(time_val9_7[:205], 1e6*(energy_total9_7[:205]-energy_total9_7[0])/atoms_bivo, 'r', label='CDFT 1e-2')
+ax_subplot[1, 0].plot(time_val10_7[:], 1e6*(energy_total10_7[:]-energy_total10_7[0])/atoms_bivo, 'g', label='CDFT 1e-3')
 ax_subplot[1, 0].set_xlim([0, time_plot])
 ax_subplot[1, 0].set_ylim([-y_lim, y_lim])
 ax_subplot[1, 0].set_ylabel('Energy / µHa')
 
 # BiVO4 electron strength
-ax_subplot[1, 1].plot(np.arange(0, strength7_7.shape[0]*0.5, 0.5)[:200], strength7_7[:200], 'r', label='CDFT 1e-2')
-ax_subplot[1, 1].plot(np.arange(0, strength8_7.shape[0]*0.5, 0.5)[:200], strength8_7[:200], 'g', label='CDFT 1e-3')
+ax_subplot[1, 1].plot(np.arange(0, strength9_7.shape[0]*0.5, 0.5)[:205], strength9_7[:205], 'r', label='CDFT 1e-2')
+ax_subplot[1, 1].plot(np.arange(0, strength10_7.shape[0]*0.5, 0.5)[:], strength10_7[:], 'g', label='CDFT 1e-3')
 ax_subplot[1, 1].set_xlim([0, time_plot])
 ax_subplot[1, 1].set_ylabel('Lagrange multiplier')
 
 # Lepidocrocite hole energy
-ax_subplot[2, 0].plot(time_val6_6[:200], 1e6*(energy_total6_6[:200]-energy_total6_6[0])/atoms_lepidocrocite, 'k', label='DFT')
-ax_subplot[2, 0].plot(time_val13_6[:200], 1e6*(energy_total13_6[:200]-energy_total13_6[0])/atoms_lepidocrocite, 'r', label='CDFT 1e-2')
-ax_subplot[2, 0].plot(time_val15_6[:200], 1e6*(energy_total15_6[:200]-energy_total15_6[0])/atoms_lepidocrocite, 'g', label='CDFT 1e-3')
+ax_subplot[2, 0].plot(time_val6_6[:205], 1e6*(energy_total6_6[:205]-energy_total6_6[0])/atoms_lepidocrocite, 'k', label='DFT')
+ax_subplot[2, 0].plot(time_val13_6[:205], 1e6*(energy_total13_6[:205]-energy_total13_6[0])/atoms_lepidocrocite, 'r', label='CDFT 1e-2')
+ax_subplot[2, 0].plot(time_val14_6[:205], 1e6*(energy_total14_6[:205]-energy_total14_6[0])/atoms_lepidocrocite, 'g', label='CDFT 1e-3')
 ax_subplot[2, 0].set_xlim([0, time_plot])
 ax_subplot[2, 0].set_ylim([-y_lim, y_lim])
 ax_subplot[2, 0].set_ylabel('Energy / µHa')
 
 # Lepidocrocite hole strength
-ax_subplot[2, 1].plot(np.arange(0, strength13_6.shape[0]*0.5, 0.5)[:200], strength13_6[:200], 'r', label='CDFT 1e-2')
-ax_subplot[2, 1].plot(np.arange(0, strength15_6.shape[0]*0.5, 0.5)[:200], strength15_6[:200], 'g', label='CDFT 1e-3')
+ax_subplot[2, 1].plot(np.arange(0, strength13_6.shape[0]*0.5, 0.5)[:205], strength13_6[:205], 'r', label='CDFT 1e-2')
+ax_subplot[2, 1].plot(np.arange(0, strength14_6.shape[0]*0.5, 0.5)[:205], strength14_6[:205], 'g', label='CDFT 1e-3')
 ax_subplot[2, 1].set_xlim([0, time_plot])
 ax_subplot[2, 1].set_ylabel('Lagrange multiplier')
 # ax_subplot[2, 1].set_ylim([-0.001, 0.006])
 
 # Hematite hole energy
-ax_subplot[3, 0].plot(time_val6_12[:200], 1e6*(energy_total6_12[:200]-energy_total6_12[0])/atoms_hematite_221, 'k', label='DFT')
-ax_subplot[3, 0].plot(time_val13_12[:200], 1e6*(energy_total13_12[:200]-energy_total13_12[0])/atoms_hematite_221, 'r', label='CDFT 1e-2')
-ax_subplot[3, 0].plot(time_val15_12[:200], 1e6*(energy_total15_12[:200]-energy_total15_12[0])/atoms_hematite_221, 'g', label='CDFT 1e-3')
+ax_subplot[3, 0].plot(time_val6_12[:205], 1e6*(energy_total6_12[:205]-energy_total6_12[0])/atoms_hematite_221, 'k', label='DFT')
+ax_subplot[3, 0].plot(time_val13_12[:205], 1e6*(energy_total13_12[:205]-energy_total13_12[0])/atoms_hematite_221, 'r', label='CDFT 1e-2')
+ax_subplot[3, 0].plot(time_val14_12[:205], 1e6*(energy_total14_12[:205]-energy_total14_12[0])/atoms_hematite_221, 'g', label='CDFT 1e-3')
 ax_subplot[3, 0].set_xlim([0, time_plot])
 ax_subplot[3, 0].set_ylim([-y_lim, y_lim])
 ax_subplot[3, 0].set_ylabel('Energy / µHa')
 ax_subplot[3, 0].set_xlabel('Time / fs')
 
 # Hematite hole strength
-ax_subplot[3, 1].plot(np.arange(0, strength13_12.shape[0]*0.5, 0.5)[:200], strength13_12[:200], 'r', label='CDFT 1e-2')
-ax_subplot[3, 1].plot(np.arange(0, strength15_12.shape[0]*0.5, 0.5)[:200], strength15_12[:200], 'g', label='CDFT 1e-3')
+ax_subplot[3, 1].plot(np.arange(0, strength13_12.shape[0]*0.5, 0.5)[:205], strength13_12[:205], 'r', label='CDFT 1e-2')
+ax_subplot[3, 1].plot(np.arange(0, strength14_12.shape[0]*0.5, 0.5)[:205], strength14_12[:205], 'g', label='CDFT 1e-3')
 ax_subplot[3, 1].set_xlim([0, time_plot])
 ax_subplot[3, 1].set_ylabel('Lagrange multiplier')
 ax_subplot[3, 1].set_xlabel('Lagrange multiplier')
