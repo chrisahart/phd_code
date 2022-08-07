@@ -229,47 +229,47 @@ def check_connect_from_distance(msd_length, com):
                             print(angle_y)
 
                     # Second nearest neighbour
-                    elif isclose(distance, msd_length[1]):
-
-                        # +a if 0 degrees to x axis and 90 degrees to y axis
-                        if abs(np.round(angle_x)) == 0 and abs(np.round(angle_y)) == 90:
-                            # pass
-                            connectivity.append([count1, count2, 4])
-
-                        # +b if 60 degrees to x axis and 30 degrees to y axis
-                        elif np.round(angle_x) == 60 and np.round(angle_y) == 30:
-                            # pass
-                            connectivity.append([count1, count2, 5])
-
-                        # If -60 to x axis and -30 to y axis
-                        elif np.round(angle_x) == -60 and np.round(angle_y) == -30:
-                            # pass
-                            connectivity.append([count1, count2, 6])
-
-                        else:
-                            print('Found atom not included in classification for msd_length[1]')
-                            print(angle_x)
-                            print(angle_y)
+                    # elif isclose(distance, msd_length[1]):
+                    #
+                    #     # +a if 0 degrees to x axis and 90 degrees to y axis
+                    #     if abs(np.round(angle_x)) == 0 and abs(np.round(angle_y)) == 90:
+                    #         # pass
+                    #         connectivity.append([count1, count2, 4])
+                    #
+                    #     # +b if 60 degrees to x axis and 30 degrees to y axis
+                    #     elif np.round(angle_x) == 60 and np.round(angle_y) == 30:
+                    #         # pass
+                    #         connectivity.append([count1, count2, 5])
+                    #
+                    #     # If -60 to x axis and -30 to y axis
+                    #     elif np.round(angle_x) == -60 and np.round(angle_y) == -30:
+                    #         # pass
+                    #         connectivity.append([count1, count2, 6])
+                    #
+                    #     else:
+                    #         print('Found atom not included in classification for msd_length[1]')
+                    #         print(angle_x)
+                    #         print(angle_y)
 
                     # Third nearest neighbour
-                    elif isclose(distance, msd_length[2]):
-
-                        # +a if -30 degrees to x axis and -60 degrees to y axis
-                        if np.round(angle_x) == 30 and np.round(angle_y) == 60:
-                            connectivity.append([count1, count2, 7])
-
-                        # -a if 30 degrees to x axis and 60 degrees to y axis
-                        elif np.round(angle_x) == -30 and np.round(angle_y) == -60:
-                            connectivity.append([count1, count2, 8])
-
-                        # +ab if 0 degrees to x axis and 90 degrees to y axis
-                        elif abs(np.round(angle_x)) == 90 and abs(np.round(angle_y)) == 0:
-                            connectivity.append([count1, count2, 9])
-
-                        else:
-                            print('Found atom not included in classification for msd_length[2]')
-                            print(angle_x)
-                            print(angle_y)
+                    # elif isclose(distance, msd_length[2]):
+                    #
+                    #     # +a if -30 degrees to x axis and -60 degrees to y axis
+                    #     if np.round(angle_x) == 30 and np.round(angle_y) == 60:
+                    #         connectivity.append([count1, count2, 7])
+                    #
+                    #     # -a if 30 degrees to x axis and 60 degrees to y axis
+                    #     elif np.round(angle_x) == -30 and np.round(angle_y) == -60:
+                    #         connectivity.append([count1, count2, 8])
+                    #
+                    #     # +ab if 0 degrees to x axis and 90 degrees to y axis
+                    #     elif abs(np.round(angle_x)) == 90 and abs(np.round(angle_y)) == 0:
+                    #         connectivity.append([count1, count2, 9])
+                    #
+                    #     else:
+                    #         print('Found atom not included in classification for msd_length[2]')
+                    #         print(angle_x)
+                    #         print(angle_y)
 
     return connectivity
 
@@ -351,16 +351,6 @@ def _calc_3D_msd3(Pt, com_chain):
 def check_symmetric(a, rtol=1e-05, atol=1e-08):
     return np.allclose(a, a.T, rtol=rtol, atol=atol)
 
-
-def calc_mobility_tensor(mobility_array):
-    """"
-    Calculate mobility tensor to get mobility along the eigendirection of system (Chris Ahart code)
-    """
-
-    eig_vals, eig_vectors = np.linalg.eig(mobility_array[0:2,0:2])
-    norm = np.linalg.norm(mobility_array[0:2,0:2])
-    print(norm)
-
 ############################   INPUT   ######################################################################
 
 if __name__ == '__main__':
@@ -375,7 +365,7 @@ if __name__ == '__main__':
     
     select_list_dir_2_plot = {
         # name of the system  
-        'Hematite':{
+        'RUB_AOM':{
 
             # 2D plane (nn-1) Boltzmann
             'npairs': 3,
@@ -391,9 +381,9 @@ if __name__ == '__main__':
             'Read_connectivity' : False, # if true, you mast supply connectivity file created manually (with or without PBC)
              'connectivity_create' : general_path + "connectivity_created.dat" ,
             'start_position' : 115-1, # 0-based stating position
-            'number of steps' : 10000, #tot number of steps,
-            'range linear fit' : slice(10000-500, 10000), #range for the linear fit depending on the number of total steps
-            'Time step' : 0.01 , #fs
+            'number of steps' : 5000, #tot number of steps,
+            'range linear fit' : slice(5000-500, 5000), #range for the linear fit depending on the number of total steps
+            'Time step' : 5 , #fs
              'Method rate calc' : 'TOT', #this can be Marcus = "NA", Jacob mod = "TOT", "MLJ_rate" for quantized rate, "SO" for spectral overlap
             # below stuff for MLJ_rate only
               "lambda_classical"  : [124.7, 124.7, 124.7 ], #meV
@@ -627,10 +617,5 @@ if __name__ == '__main__':
         plt.savefig('MSD-%s' % system, bbox_inches='tight', bbox_extra_artists=(lgd,))
         plt.savefig('MSD-%s' % save_name, bbox_inches='tight', bbox_extra_artists=(lgd,))
         #plt.show()
-
-        # Calculate mobility tensor to get mobility along the eigendirection of system (Chris Ahart code)
-        calc_mobility_tensor(mobility_array)
-        
-        
 
             
