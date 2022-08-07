@@ -375,7 +375,7 @@ if __name__ == '__main__':
     
     select_list_dir_2_plot = {
         # name of the system  
-        'RUB_AOM':{
+        'Hematite':{
 
             # 2D plane (nn-1) Boltzmann
             'npairs': 3,
@@ -385,7 +385,7 @@ if __name__ == '__main__':
             'free_energy_bias': np.zeros(3),
             'frequency': 616.667 * np.ones(3),
 
-             'Temperature' : 600, #Kelvin
+             'Temperature' : 300, #Kelvin
             'connectivity' : general_path + "connectivity.dat",
             'coordinates' : general_path + "40_40_1_supercell_2d_fe.dat",
             'Read_connectivity' : False, # if true, you mast supply connectivity file created manually (with or without PBC)
